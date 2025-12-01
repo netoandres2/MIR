@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Banco MIR – Practicar preguntas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #111827;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --correct: #22c55e;
+      --incorrect: #ef4444;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --radius-lg: 1rem;
+      --radius-pill: 999px;
+      --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%; max-width: 960px;
+      background: rgba(15,23,42,0.95);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(148,163,184,0.15);
+      box-shadow: var(--shadow-soft);
+      padding: 28px;
+    }
+
+    header {
+      display: flex; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+    }
+
+    .app-title {
+      font-size: 1.4rem; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .logo-dot {
+      width: 9px; height: 9px; border-radius: 999px;
+      background: var(--accent); box-shadow: 0 0 10px rgba(56,189,248,.9);
+    }
+
+    .subtitle {
+      color:#9ca3af; font-size:.85rem;
+    }
+
+    .stats { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .chip {
+      padding: 6px 10px; font-size: .8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15,23,42,.9);
+      display: flex; align-items: center; gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .chip strong { color: var(--text-main); }
+    .chip.success { border-color: rgba(34,197,94,.4); }
+
+    .progress-header{
+      display:flex;
+      justify-content:space-between;
+      color:#9ca3af;
+      font-size:.8rem;
+    }
+
+    .progress-bar { height: 8px; background: rgba(0,0,0,.5); border-radius: 10px; margin: 12px 0; }
+    .progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg,#0ea5e9,#22c55e);
+      border-radius: 10px; transition: width .25s;
+    }
+
+    .card {
+      background: rgba(17,24,39,.9);
+      border-radius: 1rem;
+      border: 1px solid rgba(31,41,55,.8);
+      padding: 20px;
+    }
+
+    .question-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:8px;
+    }
+
+    .question-tag {
+      background: var(--accent-soft);
+      padding: 4px 10px; border-radius: 999px;
+      color: var(--accent);
+      border: 1px solid rgba(56,189,248,.4);
+      font-size: .8rem;
+    }
+
+    .question-id { color: var(--text-muted); font-size: .8rem; }
+    .question-text { margin: 14px 0; line-height: 1.5; }
+
+    .option-button {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(31,41,55,.9);
+      background: rgba(15,23,42,.95);
+      margin-bottom: 8px;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 12px;
+      transition: transform .07s, box-shadow .07s, border-color .1s;
+    }
+
+    .option-button:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 20px rgba(0,0,0,.4);
+      border-color:rgba(56,189,248,.6);
+    }
+
+    .option-button.disabled { opacity: .7; cursor: default; box-shadow:none; transform:none; }
+    .option-button.correct { border-color: #22c55e; }
+    .option-button.incorrect { border-color: #ef4444; }
+
+    .option-letter {
+      width: 24px; height: 24px;
+      border-radius: 999px; border: 1px solid rgba(55,65,81,.9);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    .feedback {
+      margin-top: 12px;
+      border-radius: .8rem;
+      padding: 10px;
+      border: 1px solid var(--border-subtle);
+      font-size:.85rem;
+    }
+
+    .feedback.correct { border-color: #22c55e; }
+    .feedback.incorrect { border-color: #ef4444; }
+
+    .btn-row{
+      margin-top:20px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn {
+      padding: 8px 16px; border-radius: 999px;
+      background: rgba(15,23,42,1);
+      color: var(--text-main);
+      border: 1px solid rgba(31,41,55,.9);
+      cursor: pointer;
+      font-size:.85rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg,#0ea5e9,#0369a1);
+      border-color: rgba(56,189,248,.8);
+    }
+
+    .btn:disabled{
+      opacity:.5;
+      cursor:default;
+    }
+
+    .signature {
+      margin-top: 10px;
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    .signature strong { color: var(--accent); }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <header>
+    <div>
+      <div class="app-title"><span class="logo-dot"></span> Banco MIR</div>
+      <div class="subtitle">Practica preguntas de examen con retroalimentación inmediata.</div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div>
+    <div class="progress-header">
+      <span id="progress-label"></span>
+      <span id="progress-percent"></span>
+    </div>
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="question-header">
+      <span class="question-tag" id="question-tag"></span>
+      <span class="question-id" id="question-id"></span>
+    </div>
+
+    <div class="question-text" id="question-text"></div>
+    <div id="options"></div>
+    <div id="feedback-container"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="next-btn">Siguiente pregunta →</button>
+      <button class="btn" id="reset-btn">Reiniciar sesión</button>
+    </div>
+
+    <div class="signature">Diseñado y creado por <strong>Netoandres</strong></div>
+  </div>
+
+</div>
+
+<script>
+// ===========================
+// BANCO DE PREGUNTAS (25)
+// ===========================
+const questions = [
+  {
+    id: "MIR-2023-001",
+    area: "Cardiología",
+    enunciado:
+      "Varón de 65 años con dolor torácico opresivo de 40 minutos. TA 90/60, FC 50. ECG con elevación del ST en II, III y aVF. ¿Conducta inicial?",
+    opciones: [
+      "Nitroglicerina sublingual",
+      "Dopamina y valorar marcapasos",
+      "Betabloqueantes IV",
+      "Esperar y repetir ECG"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "Infarto inferior con bradicardia e hipotensión. La nitroglicerina está contraindicada. Se debe estabilizar con dopamina y valorar marcapasos."
+  },
+
+  {
+    id: "MIR-2023-002",
+    area: "Nefrología",
+    enunciado:
+      "Paciente con insuficiencia renal aguda y potasio sérico de 6,8 mEq/L con ECG normal. ¿Cuál es el tratamiento inicial?",
+    opciones: [
+      "Resinas de intercambio",
+      "Suero glucosado con insulina",
+      "Furosemida IV",
+      "Hemodiálisis inmediata"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "El manejo inicial de la hiperpotasemia grave es insulina + glucosa, que desplaza el potasio al interior celular."
+  },
+
+  {
+    id: "MIR-2023-003",
+    area: "Digestivo",
+    enunciado:
+      "Varón de 52 años con hematemesis y melena. TA 85/50. FC 118. ¿Cuál es la primera medida?",
+    opciones: [
+      "Endoscopia urgente",
+      "Reposición con cristaloides",
+      "Iniciar omeprazol IV",
+      "Somatostatina"
+    ],
+    indiceCorrecto: 1,
+    explicacion: "En hemorragia digestiva alta la reanimación hemodinámica es prioritaria."
+  },
+
+  {
+    id: "MIR-2023-004",
+    area: "Neumología",
+    enunciado:
+      "Paciente con disnea súbita, taquipnea, dolor pleurítico y saturación 85%. ¿Cuál es el diagnóstico más probable?",
+    opciones: [
+      "Neumotórax espontáneo",
+      "Tromboembolismo pulmonar",
+      "Neumonía",
+      "Asma"
+    ],
+    indiceCorrecto: 1,
+    explicacion: "Clínica típica de TEP agudo de aparición súbita."
+  },
+
+  {
+    id: "MIR-2023-005",
+    area: "Endocrinología",
+    enunciado:
+      "Paciente diabético en tratamiento con metformina presenta dolor abdominal, hiperamilasemia y amilasa normal. Diagnóstico probable:",
+    opciones: [
+      "Cetoacidosis diabética",
+      "Pancreatitis inducida por metformina",
+      "Acidosis láctica",
+      "Colecistitis"
+    ],
+    indiceCorrecto: 2,
+    explicacion: "Metformina puede causar acidosis láctica, cuadro con dolor abdominal y anión gap elevado."
+  },
+
+  {
+    id: "MIR-2023-006",
+    area: "Neurología",
+    enunciado:
+      "Paciente con hemiparesia izquierda, desviación de la mirada y afasia súbita. ¿Qué hacer primero?",
+    opciones: [
+      "TC craneal sin contraste",
+      "Trombolisis inmediata",
+      "Aspirina",
+      "RMN difusional"
+    ],
+    indiceCorrecto: 0,
+    explicacion: "Toda sospecha de ictus requiere TC urgente para descartar hemorragia."
+  },
+
+  {
+    id: "MIR-2023-007",
+    area: "Trauma",
+    enunciado:
+      "Accidente de tráfico. TA 70/40. FC 130. Llenado capilar > 4 s. ¿Qué tipo de shock es más probable?",
+    opciones: [
+      "Cardiogénico",
+      "Séptico",
+      "Hipovolémico hemorrágico",
+      "Neurogénico"
+    ],
+    indiceCorrecto: 2,
+    explicacion: "El shock traumático más frecuente es el hipovolémico por hemorragia."
+  },
+
+  {
+    id: "MIR-2023-008",
+    area: "Ginecología",
+    enunciado:
+      "Gestante de 32 semanas con cefalea, epigastralgia y TA 165/110. Orina con proteinuria ++. Diagnóstico:",
+    opciones: [
+      "Preeclampsia grave",
+      "Eclampsia",
+      "Síndrome HELLP",
+      "Hipertensión gestacional"
+    ],
+    indiceCorrecto: 0,
+    explicacion: "TA severa + síntomas neurológicos o epigastralgia = preeclampsia grave."
+  },
+
+  {
+    id: "MIR-2023-009",
+    area: "Psiquiatría",
+    enunciado:
+      "Paciente con alucinaciones auditivas, lenguaje desorganizado y delirios desde hace 2 meses. ¿Diagnóstico?",
+    opciones: [
+      "Trastorno esquizofreniforme",
+      "Trastorno esquizoafectivo",
+      "Esquizofrenia",
+      "Trastorno delirante"
+    ],
+    indiceCorrecto: 0,
+    explicacion:
+      "La duración de 1 a 6 meses es compatible con esquizofreniforme; >6 meses sería esquizofrenia."
+  },
+
+  {
+    id: "MIR-2023-010",
+    area: "Pediatría",
+    enunciado:
+      "Lactante de 10 meses con tiraje, sibilancias y saturación del 90%. ¿Diagnóstico probable?",
+    opciones: [
+      "Bronquiolitis",
+      "Asma",
+      "Neumonía",
+      "Laringitis"
+    ],
+    indiceCorrecto: 0,
+    explicacion: "Bronquiolitis: primer episodio de sibilancias en <2 años."
+  },
+
+  {
+    id: "MIR-2023-011",
+    area: "Infecciosas",
+    enunciado:
+      "Paciente VIH con CD4 = 90 células. Fiebre, tos seca, disnea progresiva. ¿Diagnóstico más probable?",
+    opciones: [
+      "Tuberculosis",
+      "Pneumocystis jirovecii",
+      "Influenza",
+      "Aspiración"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "CD4 < 200 + disnea progresiva + tos seca → sospecha alta de Pneumocystis."
+  },
+
+  {
+    id: "MIR-2023-012",
+    area: "Reumatología",
+    enunciado:
+      "Mujer con dolor y rigidez matutina > 1 hora. Afectación simétrica de manos y anti-CCP positivos. Diagnóstico:",
+    opciones: [
+      "Artrosis",
+      "Artritis reumatoide",
+      "Gota",
+      "Lupus"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "Anti-CCP es muy específico de artritis reumatoide."
+  },
+
+  {
+    id: "MIR-2023-013",
+    area: "Hematología",
+    enunciado:
+      "Paciente con anemia macrocítica, glositis y parestesias. ¿Cuál es la causa más probable?",
+    opciones: [
+      "Déficit de hierro",
+      "Déficit de B12",
+      "Hemólisis",
+      "Anemia normocítica"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "La combinación de anemia macrocítica + síntomas neurológicos es típica del déficit de vitamina B12."
+  },
+
+  {
+    id: "MIR-2023-014",
+    area: "Dermatología",
+    enunciado:
+      "Placas eritematodescamativas en codos y rodillas, signo de Auspitz. Diagnóstico:",
+    opciones: [
+      "Dermatitis atópica",
+      "Psoriasis",
+      "Tiña corporis",
+      "Pitiriasis rosada"
+    ],
+    indiceCorrecto: 1,
+    explicacion: "El signo de Auspitz es patognomónico de psoriasis."
+  },
+
+  {
+    id: "MIR-2023-015",
+    area: "Ortopedia",
+    enunciado:
+      "Dolor en la cara lateral de la cadera, empeora al acostarse sobre ese lado. Diagnóstico probable:",
+    opciones: [
+      "Coxartrosis",
+      "Tendinopatía del glúteo medio (bursitis trocantérica)",
+      "Lumbociatalgia",
+      "Fractura oculta"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "La bursitis trocantérica da dolor lateral que empeora al acostarse del lado afectado."
+  },
+
+  {
+    id: "MIR-2023-016",
+    area: "Cardiología",
+    enunciado:
+      "Soplo sistólico que aumenta con Valsalva y disminuye con la maniobra de cuclillas. ¿Diagnóstico?",
+    opciones: ["Estenosis aórtica", "Miocardiopatía hipertrófica", "CIV", "Insuficiencia mitral"],
+    indiceCorrecto: 1,
+    explicacion:
+      "La miocardiopatía hipertrófica se intensifica con Valsalva."
+  },
+
+  {
+    id: "MIR-2023-017",
+    area: "Gastroenterología",
+    enunciado:
+      "Diarrea crónica, dermatitis herpetiforme y anemia ferropénica. Diagnóstico:",
+    opciones: ["Colitis ulcerosa", "Enfermedad celíaca", "Síndrome de intestino irritable", "Enfermedad de Crohn"],
+    indiceCorrecto: 1,
+    explicacion:
+      "La dermatitis herpetiforme es característica de la enfermedad celíaca."
+  },
+
+  {
+    id: "MIR-2023-018",
+    area: "Endocrinología",
+    enunciado:
+      "Hiponatremia + hiperkalemia + hipotensión. Diagnóstico:",
+    opciones: [
+      "Síndrome de Cushing",
+      "Insuficiencia suprarrenal primaria",
+      "Hipotiroidismo",
+      "SIADH"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "La pérdida de aldosterona → hiperpotasemia + hiponatremia + hipotensión."
+  },
+
+  {
+    id: "MIR-2023-019",
+    area: "Reumatología",
+    enunciado:
+      "Cristales con forma de aguja y birrefringencia negativa. Diagnóstico:",
+    opciones: ["Gota", "Pseudogota", "Artritis reumatoide", "Artritis séptica"],
+    indiceCorrecto: 0,
+    explicacion: "Birrefringencia negativa = cristales de urato monosódico (gota)."
+  },
+
+  {
+    id: "MIR-2023-020",
+    area: "Oncología",
+    enunciado:
+      "Tos, hemoptisis, pérdida de peso y una masa apical con síndrome de Horner. Diagnóstico:",
+    opciones: ["Cáncer escamoso", "Tumor de Pancoast", "Adenocarcinoma", "Microcítico"],
+    indiceCorrecto: 1,
+    explicacion:
+      "La masa apical con Horner es típica del tumor de Pancoast."
+  },
+
+  {
+    id: "MIR-2023-021",
+    area: "Pediatría",
+    enunciado:
+      "Niño con exantema maculopapular, tos, conjuntivitis y manchas de Koplik. Diagnóstico:",
+    opciones: ["Sarampión", "Rubeola", "Escarlatina", "Eritema infeccioso"],
+    indiceCorrecto: 0,
+    explicacion: "Las manchas de Koplik son patognomónicas de sarampión."
+  },
+
+  {
+    id: "MIR-2023-022",
+    area: "Cirugía",
+    enunciado:
+      "Dolor en fosa ilíaca derecha, fiebre, Blumberg positivo. Diagnóstico más probable:",
+    opciones: ["Apendicitis aguda", "Diverticulitis", "Colecistitis", "Pancreatitis"],
+    indiceCorrecto: 0,
+    explicacion: "Clínica típica de apendicitis aguda."
+  },
+
+  {
+    id: "MIR-2023-023",
+    area: "Hematología",
+    enunciado:
+      "Paciente con Hb baja, LDH elevada y esquistocitos en frotis. Diagnóstico:",
+    opciones: ["Anemia ferropénica", "Anemia hemolítica microangiopática", "Aplasia medular", "Talasemia"],
+    indiceCorrecto: 1,
+    explicacion: "Los esquistocitos indican hemólisis intravascular microangiopática."
+  },
+
+  {
+    id: "MIR-2023-024",
+    area: "Infecciosas",
+    enunciado:
+      "Heridas necróticas, dolor desproporcionado y crepitación. Diagnóstico más probable:",
+    opciones: [
+      "Celulitis simple",
+      "Fascitis necrotizante",
+      "Erisipela",
+      "Absceso cutáneo"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "Dolor desproporcionado + necrosis + crepitación = fascitis necrotizante."
+  },
+
+  {
+    id: "MIR-2023-025",
+    area: "Urgencias",
+    enunciado:
+      "Paciente en urgencias con Glasgow 6, respiración irregular y anisocoria. ¿Cuál es el manejo inmediato?",
+    opciones: [
+      "Tomografía antes de intubar",
+      "Intubar de inmediato",
+      "Administrar manitol y observar",
+      "Nada, esperar"
+    ],
+    indiceCorrecto: 1,
+    explicacion:
+      "Glasgow ≤ 8 requiere intubación inmediata para proteger la vía aérea."
+  }
+];
+
+// ===========================
+// ESTADO
+// ===========================
+let currentIndex = 0;
+let hasAnswered = false;
+let correctCount = 0;
+let answeredCount = 0;
+
+// ===========================
+// ELEMENTOS DOM
+// ===========================
+const statsEl = document.getElementById("stats");
+const progressLabelEl = document.getElementById("progress-label");
+const progressPercentEl = document.getElementById("progress-percent");
+const progressFillEl = document.getElementById("progress-fill");
+const questionTagEl = document.getElementById("question-tag");
+const questionIdEl = document.getElementById("question-id");
+const questionTextEl = document.getElementById("question-text");
+const optionsEl = document.getElementById("options");
+const feedbackContainerEl = document.getElementById("feedback-container");
+const nextBtnEl = document.getElementById("next-btn");
+const resetBtnEl = document.getElementById("reset-btn");
+
+// ===========================
+// FUNCIONES
+// ===========================
+function renderStats() {
+  const aciertos = correctCount;
+  const totalResp = answeredCount;
+  const pct = totalResp ? Math.round((aciertos / totalResp) * 100) : 0;
+  statsEl.innerHTML = `
+    <div class="chip"><strong>${totalResp}</strong> contestadas</div>
+    <div class="chip success"><strong>${aciertos}</strong> aciertos</div>
+    <div class="chip">${pct}% acierto</div>
+  `;
+}
+
+function renderProgress() {
+  const total = questions.length;
+  const pct = Math.round((answeredCount / total) * 100);
+  progressLabelEl.textContent = `Pregunta ${currentIndex + 1} de ${total}`;
+  progressPercentEl.textContent = `${pct}% completado`;
+  progressFillEl.style.width = pct + "%";
+}
+
+function renderQuestion() {
+  const q = questions[currentIndex];
+  hasAnswered = false;
+  feedbackContainerEl.innerHTML = "";
+
+  questionTagEl.textContent = q.area;
+  questionIdEl.textContent = q.id;
+  questionTextEl.textContent = q.enunciado;
+
+  optionsEl.innerHTML = "";
+  const letras = ["A", "B", "C", "D", "E"];
+
+  q.opciones.forEach((op, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option-button";
+    btn.dataset.index = i;
+    btn.innerHTML = `<div class="option-letter">${letras[i] || "?"}</div>${op}`;
+    btn.onclick = () => handleAnswer(i);
+    optionsEl.appendChild(btn);
+  });
+
+  renderStats();
+  renderProgress();
+  nextBtnEl.disabled = true;
+}
+
+function handleAnswer(i) {
+  if (hasAnswered) return;
+  hasAnswered = true;
+  answeredCount++;
+
+  const q = questions[currentIndex];
+  const correct = q.indiceCorrecto;
+
+  const btns = optionsEl.querySelectorAll(".option-button");
+  btns.forEach(b => {
+    b.disabled = true;
+    b.classList.add("disabled");
+    const idx = Number(b.dataset.index);
+    if (idx === correct) b.classList.add("correct");
+    if (idx === i && i !== correct) b.classList.add("incorrect");
+  });
+
+  if (i === correct) correctCount++;
+
+  feedbackContainerEl.innerHTML = `
+    <div class="feedback ${i === correct ? "correct" : "incorrect"}">
+      <strong>${i === correct ? "Correcto" : "Incorrecto"}</strong><br>
+      ${q.explicacion}
+    </div>
+  `;
+
+  renderStats();
+  renderProgress();
+  nextBtnEl.disabled = false;
+}
+
+// ===========================
+// EVENTOS
+// ===========================
+nextBtnEl.onclick = () => {
+  if (!hasAnswered) return;
+  currentIndex = (currentIndex + 1) % questions.length;
+  renderQuestion();
+};
+
+resetBtnEl.onclick = () => {
+  currentIndex = 0;
+  hasAnswered = false;
+  correctCount = 0;
+  answeredCount = 0;
+  renderQuestion();
+};
+
+// ===========================
+// INICIO
+// ===========================
+renderQuestion();
+</script>
+
+</body>
+</html>
