@@ -1,4 +1,4 @@
-export const questions = [
+export const baseQuestions = [
   {
     id: "MIR-2023-001",
     area: "Cardiología",
