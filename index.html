@@ -22,7 +22,8 @@
 
     * {
       box-sizing: border-box;
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
     }
 
     body {
@@ -36,160 +37,284 @@
     }
 
     .app {
-      width: 100%; max-width: 960px;
-      background: rgba(15,23,42,0.95);
+      width: 100%;
+      max-width: 960px;
+      background: rgba(15, 23, 42, 0.95);
       border-radius: 1.5rem;
-      border: 1px solid rgba(148,163,184,0.15);
+      border: 1px solid rgba(148, 163, 184, 0.15);
       box-shadow: var(--shadow-soft);
       padding: 28px;
     }
 
     header {
-      display: flex; justify-content: space-between;
-      flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .app-title {
-      font-size: 1.4rem; font-weight: 600;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .logo-dot {
-      width: 9px; height: 9px; border-radius: 999px;
-      background: var(--accent); box-shadow: 0 0 10px rgba(56,189,248,.9);
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
     }
 
     .subtitle {
-      color:#9ca3af; font-size:.85rem;
+      color: #9ca3af;
+      font-size: 0.85rem;
     }
 
-    .stats { display: flex; gap: 8px; flex-wrap: wrap; }
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
 
-    .chip {
-      padding: 6px 10px; font-size: .8rem;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      background: rgba(15,23,42,.9);
-      display: flex; align-items: center; gap: 6px;
+    .profile-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    .chip strong { color: var(--text-main); }
-    .chip.success { border-color: rgba(34,197,94,.4); }
-
-    .progress-header{
-      display:flex;
-      justify-content:space-between;
-      color:#9ca3af;
-      font-size:.8rem;
+    .profile-select {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      padding: 4px 10px;
+      font-size: 0.8rem;
     }
 
-    .progress-bar { height: 8px; background: rgba(0,0,0,.5); border-radius: 10px; margin: 12px 0; }
+    .stats {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .chip strong {
+      color: var(--text-main);
+    }
+
+    .chip.success {
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      color: #9ca3af;
+      font-size: 0.8rem;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      margin: 12px 0;
+    }
+
     .progress-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg,#0ea5e9,#22c55e);
-      border-radius: 10px; transition: width .25s;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0ea5e9, #22c55e);
+      border-radius: 10px;
+      transition: width 0.25s;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .control-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .area-select {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      padding: 4px 10px;
+      font-size: 0.8rem;
     }
 
     .card {
-      background: rgba(17,24,39,.9);
+      background: rgba(17, 24, 39, 0.9);
       border-radius: 1rem;
-      border: 1px solid rgba(31,41,55,.8);
+      border: 1px solid rgba(31, 41, 55, 0.8);
       padding: 20px;
     }
 
-    .question-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:8px;
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
     .question-tag {
       background: var(--accent-soft);
-      padding: 4px 10px; border-radius: 999px;
+      padding: 4px 10px;
+      border-radius: 999px;
       color: var(--accent);
-      border: 1px solid rgba(56,189,248,.4);
-      font-size: .8rem;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      font-size: 0.8rem;
     }
 
-    .question-id { color: var(--text-muted); font-size: .8rem; }
-    .question-text { margin: 14px 0; line-height: 1.5; }
+    .question-id {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .question-text {
+      margin: 14px 0;
+      line-height: 1.5;
+    }
 
     .option-button {
       padding: 10px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(31,41,55,.9);
-      background: rgba(15,23,42,.95);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: rgba(15, 23, 42, 0.95);
       margin-bottom: 8px;
       color: var(--text-main);
       cursor: pointer;
-      display: flex; align-items: center; gap: 12px;
-      transition: transform .07s, box-shadow .07s, border-color .1s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.07s, box-shadow 0.07s, border-color 0.1s;
     }
 
-    .option-button:hover{
-      transform:translateY(-1px);
-      box-shadow:0 10px 20px rgba(0,0,0,.4);
-      border-color:rgba(56,189,248,.6);
+    .option-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      border-color: rgba(56, 189, 248, 0.6);
     }
 
-    .option-button.disabled { opacity: .7; cursor: default; box-shadow:none; transform:none; }
-    .option-button.correct { border-color: #22c55e; }
-    .option-button.incorrect { border-color: #ef4444; }
+    .option-button.disabled {
+      opacity: 0.7;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .option-button.correct {
+      border-color: #22c55e;
+    }
+
+    .option-button.incorrect {
+      border-color: #ef4444;
+    }
 
     .option-letter {
-      width: 24px; height: 24px;
-      border-radius: 999px; border: 1px solid rgba(55,65,81,.9);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .8rem;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
     .feedback {
       margin-top: 12px;
-      border-radius: .8rem;
+      border-radius: 0.8rem;
       padding: 10px;
       border: 1px solid var(--border-subtle);
-      font-size:.85rem;
+      font-size: 0.85rem;
     }
 
-    .feedback.correct { border-color: #22c55e; }
-    .feedback.incorrect { border-color: #ef4444; }
+    .feedback.correct {
+      border-color: #22c55e;
+    }
 
-    .btn-row{
-      margin-top:20px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+    .feedback.incorrect {
+      border-color: #ef4444;
+    }
+
+    .btn-row {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .btn {
-      padding: 8px 16px; border-radius: 999px;
-      background: rgba(15,23,42,1);
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 1);
       color: var(--text-main);
-      border: 1px solid rgba(31,41,55,.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
       cursor: pointer;
-      font-size:.85rem;
+      font-size: 0.85rem;
     }
 
     .btn-primary {
-      background: linear-gradient(90deg,#0ea5e9,#0369a1);
-      border-color: rgba(56,189,248,.8);
+      background: linear-gradient(90deg, #0ea5e9, #0369a1);
+      border-color: rgba(56, 189, 248, 0.8);
     }
 
-    .btn:disabled{
-      opacity:.5;
-      cursor:default;
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: default;
     }
 
     .signature {
       margin-top: 10px;
-      font-size: .8rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    .signature strong { color: var(--accent); }
+    .signature strong {
+      color: var(--accent);
+    }
   </style>
 </head>
 
@@ -197,12 +322,22 @@
 <div class="app">
 
   <header>
-    <div>
+    <div class="header-left">
       <div class="app-title"><span class="logo-dot"></span> Banco MIR</div>
-      <div class="subtitle">Practica preguntas de examen con retroalimentación inmediata.</div>
+      <div class="subtitle">Modo tipo Anki, con perfiles y sesiones por área o rápidas.</div>
     </div>
 
-    <div class="stats" id="stats"></div>
+    <div class="header-right">
+      <div class="profile-row">
+        <span>Perfil:</span>
+        <select id="profile-select" class="profile-select">
+          <!-- Cambia estos nombres si quieres -->
+          <option value="Usuario 1">Usuario 1</option>
+          <option value="Usuario 2">Usuario 2</option>
+        </select>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
   </header>
 
   <div>
@@ -211,6 +346,19 @@
       <span id="progress-percent"></span>
     </div>
     <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+  </div>
+
+  <div class="controls-row">
+    <div class="control-group">
+      <span>Área:</span>
+      <select id="area-filter" class="area-select">
+        <!-- Opciones se rellenan con JS -->
+      </select>
+    </div>
+    <div class="control-group">
+      <button class="btn" id="apply-filter-btn">Sesión por área</button>
+      <button class="btn" id="quick-session-btn">Sesión rápida (10)</button>
+    </div>
   </div>
 
   <div class="card">
@@ -225,7 +373,7 @@
 
     <div class="btn-row">
       <button class="btn btn-primary" id="next-btn">Siguiente pregunta →</button>
-      <button class="btn" id="reset-btn">Reiniciar sesión</button>
+      <button class="btn" id="reset-btn">Reiniciar sesión completa</button>
     </div>
 
     <div class="signature">Diseñado y creado por <strong>Netoandres</strong></div>
@@ -234,9 +382,9 @@
 </div>
 
 <script>
-// ===========================
-// BANCO DE PREGUNTAS (25)
-// ===========================
+/* ===========================
+   1. BANCO DE PREGUNTAS
+   ===========================*/
 const questions = [
   {
     id: "MIR-2023-001",
@@ -253,7 +401,6 @@ const questions = [
     explicacion:
       "Infarto inferior con bradicardia e hipotensión. La nitroglicerina está contraindicada. Se debe estabilizar con dopamina y valorar marcapasos."
   },
-
   {
     id: "MIR-2023-002",
     area: "Nefrología",
@@ -269,7 +416,6 @@ const questions = [
     explicacion:
       "El manejo inicial de la hiperpotasemia grave es insulina + glucosa, que desplaza el potasio al interior celular."
   },
-
   {
     id: "MIR-2023-003",
     area: "Digestivo",
@@ -284,7 +430,6 @@ const questions = [
     indiceCorrecto: 1,
     explicacion: "En hemorragia digestiva alta la reanimación hemodinámica es prioritaria."
   },
-
   {
     id: "MIR-2023-004",
     area: "Neumología",
@@ -299,7 +444,6 @@ const questions = [
     indiceCorrecto: 1,
     explicacion: "Clínica típica de TEP agudo de aparición súbita."
   },
-
   {
     id: "MIR-2023-005",
     area: "Endocrinología",
@@ -314,7 +458,6 @@ const questions = [
     indiceCorrecto: 2,
     explicacion: "Metformina puede causar acidosis láctica, cuadro con dolor abdominal y anión gap elevado."
   },
-
   {
     id: "MIR-2023-006",
     area: "Neurología",
@@ -329,7 +472,6 @@ const questions = [
     indiceCorrecto: 0,
     explicacion: "Toda sospecha de ictus requiere TC urgente para descartar hemorragia."
   },
-
   {
     id: "MIR-2023-007",
     area: "Trauma",
@@ -344,7 +486,6 @@ const questions = [
     indiceCorrecto: 2,
     explicacion: "El shock traumático más frecuente es el hipovolémico por hemorragia."
   },
-
   {
     id: "MIR-2023-008",
     area: "Ginecología",
@@ -359,7 +500,6 @@ const questions = [
     indiceCorrecto: 0,
     explicacion: "TA severa + síntomas neurológicos o epigastralgia = preeclampsia grave."
   },
-
   {
     id: "MIR-2023-009",
     area: "Psiquiatría",
@@ -375,7 +515,6 @@ const questions = [
     explicacion:
       "La duración de 1 a 6 meses es compatible con esquizofreniforme; >6 meses sería esquizofrenia."
   },
-
   {
     id: "MIR-2023-010",
     area: "Pediatría",
@@ -390,7 +529,6 @@ const questions = [
     indiceCorrecto: 0,
     explicacion: "Bronquiolitis: primer episodio de sibilancias en <2 años."
   },
-
   {
     id: "MIR-2023-011",
     area: "Infecciosas",
@@ -406,7 +544,6 @@ const questions = [
     explicacion:
       "CD4 < 200 + disnea progresiva + tos seca → sospecha alta de Pneumocystis."
   },
-
   {
     id: "MIR-2023-012",
     area: "Reumatología",
@@ -422,7 +559,6 @@ const questions = [
     explicacion:
       "Anti-CCP es muy específico de artritis reumatoide."
   },
-
   {
     id: "MIR-2023-013",
     area: "Hematología",
@@ -438,7 +574,6 @@ const questions = [
     explicacion:
       "La combinación de anemia macrocítica + síntomas neurológicos es típica del déficit de vitamina B12."
   },
-
   {
     id: "MIR-2023-014",
     area: "Dermatología",
@@ -453,7 +588,6 @@ const questions = [
     indiceCorrecto: 1,
     explicacion: "El signo de Auspitz es patognomónico de psoriasis."
   },
-
   {
     id: "MIR-2023-015",
     area: "Ortopedia",
@@ -469,7 +603,6 @@ const questions = [
     explicacion:
       "La bursitis trocantérica da dolor lateral que empeora al acostarse del lado afectado."
   },
-
   {
     id: "MIR-2023-016",
     area: "Cardiología",
@@ -480,7 +613,6 @@ const questions = [
     explicacion:
       "La miocardiopatía hipertrófica se intensifica con Valsalva."
   },
-
   {
     id: "MIR-2023-017",
     area: "Gastroenterología",
@@ -491,7 +623,6 @@ const questions = [
     explicacion:
       "La dermatitis herpetiforme es característica de la enfermedad celíaca."
   },
-
   {
     id: "MIR-2023-018",
     area: "Endocrinología",
@@ -507,7 +638,6 @@ const questions = [
     explicacion:
       "La pérdida de aldosterona → hiperpotasemia + hiponatremia + hipotensión."
   },
-
   {
     id: "MIR-2023-019",
     area: "Reumatología",
@@ -517,7 +647,6 @@ const questions = [
     indiceCorrecto: 0,
     explicacion: "Birrefringencia negativa = cristales de urato monosódico (gota)."
   },
-
   {
     id: "MIR-2023-020",
     area: "Oncología",
@@ -528,7 +657,6 @@ const questions = [
     explicacion:
       "La masa apical con Horner es típica del tumor de Pancoast."
   },
-
   {
     id: "MIR-2023-021",
     area: "Pediatría",
@@ -538,7 +666,6 @@ const questions = [
     indiceCorrecto: 0,
     explicacion: "Las manchas de Koplik son patognomónicas de sarampión."
   },
-
   {
     id: "MIR-2023-022",
     area: "Cirugía",
@@ -548,7 +675,6 @@ const questions = [
     indiceCorrecto: 0,
     explicacion: "Clínica típica de apendicitis aguda."
   },
-
   {
     id: "MIR-2023-023",
     area: "Hematología",
@@ -558,7 +684,6 @@ const questions = [
     indiceCorrecto: 1,
     explicacion: "Los esquistocitos indican hemólisis intravascular microangiopática."
   },
-
   {
     id: "MIR-2023-024",
     area: "Infecciosas",
@@ -574,7 +699,6 @@ const questions = [
     explicacion:
       "Dolor desproporcionado + necrosis + crepitación = fascitis necrotizante."
   },
-
   {
     id: "MIR-2023-025",
     area: "Urgencias",
@@ -592,17 +716,78 @@ const questions = [
   }
 ];
 
-// ===========================
-// ESTADO
-// ===========================
-let currentIndex = 0;
-let hasAnswered = false;
-let correctCount = 0;
-let answeredCount = 0;
+/* ===========================
+   2. ESTADO POR PERFIL
+   ===========================*/
 
-// ===========================
-// ELEMENTOS DOM
-// ===========================
+const STORAGE_KEY = "mir_profiles_state_v1";
+const PROFILE_NAMES = ["Usuario 1", "Usuario 2"];
+
+let appState = null;
+let activeProfileName = PROFILE_NAMES[0];
+
+function createEmptyProfileState() {
+  return {
+    perQuestion: questions.map(() => ({ streak: 0, mastered: false })),
+    queue: questions.map((_, idx) => idx),
+    currentIndex: null,
+    stats: {
+      answeredCount: 0,
+      correctCount: 0,
+      masteredCount: 0
+    }
+  };
+}
+
+function loadAppState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      const profiles = {};
+      PROFILE_NAMES.forEach(name => {
+        profiles[name] = createEmptyProfileState();
+      });
+      appState = {
+        activeProfile: PROFILE_NAMES[0],
+        profiles
+      };
+      saveAppState();
+    } else {
+      appState = JSON.parse(raw);
+      PROFILE_NAMES.forEach(name => {
+        if (!appState.profiles[name]) {
+          appState.profiles[name] = createEmptyProfileState();
+        }
+      });
+    }
+    activeProfileName = appState.activeProfile || PROFILE_NAMES[0];
+  } catch (e) {
+    console.error("Error cargando estado, reiniciando:", e);
+    const profiles = {};
+    PROFILE_NAMES.forEach(name => {
+      profiles[name] = createEmptyProfileState();
+    });
+    appState = {
+      activeProfile: PROFILE_NAMES[0],
+      profiles
+    };
+    activeProfileName = PROFILE_NAMES[0];
+    saveAppState();
+  }
+}
+
+function saveAppState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+}
+
+function getActiveProfileState() {
+  return appState.profiles[activeProfileName];
+}
+
+/* ===========================
+   3. ELEMENTOS DOM
+   ===========================*/
+const profileSelectEl = document.getElementById("profile-select");
 const statsEl = document.getElementById("stats");
 const progressLabelEl = document.getElementById("progress-label");
 const progressPercentEl = document.getElementById("progress-percent");
@@ -615,31 +800,104 @@ const feedbackContainerEl = document.getElementById("feedback-container");
 const nextBtnEl = document.getElementById("next-btn");
 const resetBtnEl = document.getElementById("reset-btn");
 
-// ===========================
-// FUNCIONES
-// ===========================
+const areaFilterEl = document.getElementById("area-filter");
+const applyFilterBtnEl = document.getElementById("apply-filter-btn");
+const quickSessionBtnEl = document.getElementById("quick-session-btn");
+
+/* ===========================
+   4. RENDERIZADO
+   ===========================*/
+
 function renderStats() {
-  const aciertos = correctCount;
-  const totalResp = answeredCount;
-  const pct = totalResp ? Math.round((aciertos / totalResp) * 100) : 0;
+  const prof = getActiveProfileState();
+  const { answeredCount, correctCount } = prof.stats;
+  const pct = answeredCount ? Math.round((correctCount / answeredCount) * 100) : 0;
   statsEl.innerHTML = `
-    <div class="chip"><strong>${totalResp}</strong> contestadas</div>
-    <div class="chip success"><strong>${aciertos}</strong> aciertos</div>
+    <div class="chip"><strong>${answeredCount}</strong> contestadas</div>
+    <div class="chip success"><strong>${correctCount}</strong> aciertos</div>
     <div class="chip">${pct}% acierto</div>
   `;
 }
 
 function renderProgress() {
+  const prof = getActiveProfileState();
   const total = questions.length;
-  const pct = Math.round((answeredCount / total) * 100);
-  progressLabelEl.textContent = `Pregunta ${currentIndex + 1} de ${total}`;
-  progressPercentEl.textContent = `${pct}% completado`;
+  const mastered = prof.stats.masteredCount;
+  const pct = total ? Math.round((mastered / total) * 100) : 0;
+  progressLabelEl.textContent = `Dominadas ${mastered} de ${total}`;
+  progressPercentEl.textContent = `${pct}% dominadas`;
   progressFillEl.style.width = pct + "%";
 }
 
-function renderQuestion() {
-  const q = questions[currentIndex];
-  hasAnswered = false;
+function showFinished() {
+  questionTagEl.textContent = "Sesión completada 🎉";
+  questionIdEl.textContent = "";
+  questionTextEl.textContent =
+    "Este perfil ya completó la sesión actual. Elige «Sesión por área», «Sesión rápida (10)» o pulsa «Reiniciar sesión completa».";
+  optionsEl.innerHTML = "";
+  feedbackContainerEl.innerHTML = "";
+  nextBtnEl.disabled = true;
+}
+
+function shuffleArray(arr) {
+  const copy = arr.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/**
+ * Construye una cola nueva para la sesión actual.
+ * - Respeta el filtro de área si respectFilter = true.
+ * - limit deja la sesión en N preguntas (para sesión rápida).
+ * - Prioriza preguntas NO dominadas, luego dominadas.
+ */
+function buildSessionQueue(profile, { respectFilter = true, limit = null } = {}) {
+  const areaValue = respectFilter ? areaFilterEl.value : "all";
+  let indices = questions
+    .map((q, idx) => ({ q, idx }))
+    .filter(obj => areaValue === "all" || obj.q.area === areaValue)
+    .map(obj => obj.idx);
+
+  if (indices.length === 0) return [];
+
+  const notMastered = indices.filter(i => !profile.perQuestion[i].mastered);
+  const mastered = indices.filter(i => profile.perQuestion[i].mastered);
+
+  let ordered = shuffleArray([...notMastered, ...mastered]);
+
+  if (limit && ordered.length > limit) {
+    ordered = ordered.slice(0, limit);
+  }
+  return ordered;
+}
+
+function pickNextFromQueue() {
+  const prof = getActiveProfileState();
+  if (prof.queue.length === 0) {
+    prof.currentIndex = null;
+    saveAppState();
+    showFinished();
+    renderStats();
+    renderProgress();
+    return;
+  }
+  prof.currentIndex = prof.queue.shift();
+  saveAppState();
+  renderQuestionCard();
+}
+
+function renderQuestionCard() {
+  const prof = getActiveProfileState();
+  const idx = prof.currentIndex;
+  if (idx === null || idx === undefined) {
+    pickNextFromQueue();
+    return;
+  }
+
+  const q = questions[idx];
   feedbackContainerEl.innerHTML = "";
 
   questionTagEl.textContent = q.area;
@@ -647,7 +905,7 @@ function renderQuestion() {
   questionTextEl.textContent = q.enunciado;
 
   optionsEl.innerHTML = "";
-  const letras = ["A", "B", "C", "D", "E"];
+  const letras = ["A", "B", "C", "D", "E", "F"];
 
   q.opciones.forEach((op, i) => {
     const btn = document.createElement("button");
@@ -663,58 +921,179 @@ function renderQuestion() {
   nextBtnEl.disabled = true;
 }
 
-function handleAnswer(i) {
-  if (hasAnswered) return;
-  hasAnswered = true;
-  answeredCount++;
+/* ===========================
+   5. LÓGICA TIPO ANKI
+   ===========================*/
 
-  const q = questions[currentIndex];
+let hasAnswered = false;
+
+function handleAnswer(i) {
+  const prof = getActiveProfileState();
+  const idx = prof.currentIndex;
+  if (idx === null || idx === undefined || hasAnswered) return;
+  hasAnswered = true;
+
+  const q = questions[idx];
+  const perQ = prof.perQuestion[idx];
   const correct = q.indiceCorrecto;
 
   const btns = optionsEl.querySelectorAll(".option-button");
   btns.forEach(b => {
     b.disabled = true;
     b.classList.add("disabled");
-    const idx = Number(b.dataset.index);
-    if (idx === correct) b.classList.add("correct");
-    if (idx === i && i !== correct) b.classList.add("incorrect");
+    const indexBtn = Number(b.dataset.index);
+    if (indexBtn === correct) b.classList.add("correct");
+    if (indexBtn === i && i !== correct) b.classList.add("incorrect");
   });
 
-  if (i === correct) correctCount++;
+  prof.stats.answeredCount++;
+
+  let extraMsg = "";
+
+  if (i === correct) {
+    prof.stats.correctCount++;
+    perQ.streak++;
+
+    if (!perQ.mastered && perQ.streak >= 2) {
+      perQ.mastered = true;
+      prof.stats.masteredCount++;
+      extraMsg =
+        "<br><em>Has acertado esta pregunta dos veces. La consideramos dominada y dejará de salir en sesiones centradas en no dominadas.</em>";
+    } else if (!perQ.mastered) {
+      prof.queue.push(idx);
+      extraMsg =
+        "<br><em>La verás otra vez más adelante para consolidarla.</em>";
+    }
+  } else {
+    perQ.streak = 0;
+    if (perQ.mastered) {
+      perQ.mastered = false;
+      prof.stats.masteredCount = Math.max(0, prof.stats.masteredCount - 1);
+    }
+
+    if (prof.queue.length <= 2) {
+      prof.queue.unshift(idx);
+    } else {
+      prof.queue.splice(2, 0, idx);
+    }
+
+    extraMsg =
+      "<br><em>Fallaste esta tarjeta. Se repetirá pronto para que puedas fijarla.</em>";
+  }
 
   feedbackContainerEl.innerHTML = `
     <div class="feedback ${i === correct ? "correct" : "incorrect"}">
       <strong>${i === correct ? "Correcto" : "Incorrecto"}</strong><br>
-      ${q.explicacion}
+      ${q.explicacion || ""}${extraMsg}
     </div>
   `;
 
+  saveAppState();
   renderStats();
   renderProgress();
   nextBtnEl.disabled = false;
 }
 
-// ===========================
-// EVENTOS
-// ===========================
+/* ===========================
+   6. EVENTOS
+   ===========================*/
+
 nextBtnEl.onclick = () => {
   if (!hasAnswered) return;
-  currentIndex = (currentIndex + 1) % questions.length;
-  renderQuestion();
+  hasAnswered = false;
+  pickNextFromQueue();
 };
 
 resetBtnEl.onclick = () => {
-  currentIndex = 0;
+  const prof = getActiveProfileState();
+  const newState = createEmptyProfileState();
+  appState.profiles[activeProfileName] = newState;
   hasAnswered = false;
-  correctCount = 0;
-  answeredCount = 0;
-  renderQuestion();
+  saveAppState();
+  pickNextFromQueue();
 };
 
-// ===========================
-// INICIO
-// ===========================
-renderQuestion();
+profileSelectEl.onchange = () => {
+  activeProfileName = profileSelectEl.value;
+  appState.activeProfile = activeProfileName;
+  saveAppState();
+  hasAnswered = false;
+
+  const prof = getActiveProfileState();
+  if (prof.currentIndex === null && prof.queue.length === 0) {
+    showFinished();
+    renderStats();
+    renderProgress();
+  } else {
+    if (prof.currentIndex === null) {
+      pickNextFromQueue();
+    } else {
+      renderQuestionCard();
+    }
+  }
+};
+
+// Nueva sesión por área (usa filtro + prioriza no dominadas)
+applyFilterBtnEl.onclick = () => {
+  const prof = getActiveProfileState();
+  prof.queue = buildSessionQueue(prof, { respectFilter: true, limit: null });
+  prof.currentIndex = null;
+  hasAnswered = false;
+  saveAppState();
+  if (prof.queue.length === 0) {
+    showFinished();
+  } else {
+    pickNextFromQueue();
+  }
+};
+
+// Sesión rápida de 10 preguntas, respetando el área seleccionada
+quickSessionBtnEl.onclick = () => {
+  const prof = getActiveProfileState();
+  prof.queue = buildSessionQueue(prof, { respectFilter: true, limit: 10 });
+  prof.currentIndex = null;
+  hasAnswered = false;
+  saveAppState();
+  if (prof.queue.length === 0) {
+    showFinished();
+  } else {
+    pickNextFromQueue();
+  }
+};
+
+/* ===========================
+   7. INICIO
+   ===========================*/
+
+function initAreaFilter() {
+  const areas = Array.from(new Set(questions.map(q => q.area)));
+  areaFilterEl.innerHTML =
+    '<option value="all">Todas las áreas</option>' +
+    areas.map(a => `<option value="${a}">${a}</option>`).join("");
+}
+
+function init() {
+  loadAppState();
+  initAreaFilter();
+
+  profileSelectEl.value = activeProfileName;
+
+  const prof = getActiveProfileState();
+  if (prof.currentIndex === null && prof.queue.length === 0) {
+    showFinished();
+    renderStats();
+    renderProgress();
+  } else if (prof.currentIndex === null) {
+    pickNextFromQueue();
+  } else {
+    renderQuestionCard();
+  }
+}
+
+let hasAnsweredInit = false;
+let hasAnsweredClickGuard = false;
+
+init();
 </script>
 
 </body>
