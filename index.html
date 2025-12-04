@@ -2,181 +2,1154 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Banco MIR – Modo Anki</title>
+  <title>Banco MIR – Modo Anki y Examen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    :root {
+      --bg: #020617;
+      --card-bg: #020617;
+      --panel-bg: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --correct: #22c55e;
+      --incorrect: #ef4444;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --radius-lg: 1rem;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.65);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 50%, #000 100%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Inter", sans-serif;
+      color: var(--text-main);
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 24px 12px 40px;
     }
 
-    h1 {
-      margin-top: 20px;
-      font-size: 28px;
+    .shell {
+      width: 100%;
+      max-width: 1100px;
     }
 
-    #card {
-      background: #1e293b;
-      width: 90%;
-      max-width: 780px;
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      row-gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    header h1 span {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .profile-area {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      padding: 6px 10px 6px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      backdrop-filter: blur(18px);
+    }
+
+    select,
+    input[type="text"],
+    input[type="number"] {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 6px 12px;
+      color: var(--text-main);
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      color: white;
+      cursor: pointer;
+      background: radial-gradient(circle at top left, #38bdf8, #0ea5e9);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: rgba(148, 163, 184, 0.5);
+      color: var(--text-main);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 890px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #020617, #020617 40%, #000 120%);
+      border-radius: 24px;
+      border: 1px solid rgba(30, 64, 175, 0.9);
+      box-shadow: var(--shadow-soft);
+      padding: 20px 18px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 60%);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 4px 10px;
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    #enunciado {
+      margin: 8px 0 14px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    #opciones {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
     }
 
     .opcion {
-      background: #334155;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
       cursor: pointer;
-      transition: 0.2s;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      transition: background 0.15s ease, border-color 0.15s ease,
+        transform 0.08s ease;
+    }
+
+    .opcion-label {
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 18px;
     }
 
     .opcion:hover {
-      background: #475569;
+      background: rgba(30, 64, 175, 0.6);
+      border-color: var(--accent);
+      transform: translateY(-1px);
     }
 
-    .correcta {
-      background: #16a34a !important;
-    }
-    .incorrecta {
-      background: #dc2626 !important;
+    .opcion.correcta {
+      background: rgba(22, 163, 74, 0.26);
+      border-color: var(--correct);
     }
 
-    #explicacion {
-      margin-top: 15px;
-      background: #0f172a;
-      padding: 15px;
-      border-radius: 8px;
+    .opcion.incorrecta {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: var(--incorrect);
+    }
+
+    .respuesta-panel {
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
       display: none;
     }
 
-    #btn-siguiente {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #3b82f6;
+    .respuesta-panel strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .anki-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      justify-content: flex-end;
+    }
+
+    .anki-btn {
+      flex: 1 1 90px;
+      justify-content: center;
+    }
+
+    .anki-btn.dificil {
+      background: radial-gradient(circle at top left, #f97316, #ea580c);
+    }
+
+    .anki-btn.facil {
+      background: radial-gradient(circle at top left, #22c55e, #16a34a);
+    }
+
+    .anki-btn.neutra {
+      background: radial-gradient(circle at top left, #64748b, #475569);
+    }
+
+    .side-panel {
+      border-radius: 24px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      background: rgba(15, 23, 42, 0.92);
+      padding: 14px 14px 16px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+    }
+
+    .side-panel h2 {
+      font-size: 0.95rem;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+    }
+
+    .side-section {
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(51, 65, 85, 0.9);
+    }
+
+    .side-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .stat {
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9));
+      border-radius: 12px;
+      padding: 8px 8px 7px;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .stat-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .filters label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 4px;
+      padding: 3px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      font-size: 0.75rem;
+    }
+
+    .mode-btn {
+      border-radius: 999px;
       border: none;
-      border-radius: 8px;
+      font-size: 0.75rem;
+      padding: 5px 10px;
       cursor: pointer;
-      color: white;
-      font-size: 16px;
+      background: transparent;
+      color: var(--text-muted);
     }
 
-    #contador {
-      margin-top: 10px;
-      font-size: 18px;
+    .mode-btn.active {
+      background: var(--accent-soft);
+      color: var(--accent);
     }
 
+    .exam-inputs {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      margin-top: 18px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+  <div class="shell">
+    <header>
+      <h1>
+        <span>BANCO MIR · CARDIOLOGÍA (& Más)</span>
+        Modo Anki · Examen &amp; Estadísticas
+      </h1>
 
-  <h1>Modo Anki – Preguntas MIR</h1>
-  <div id="contador">Cargando preguntas...</div>
+      <div class="profile-area">
+        <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.16em; color:var(--text-muted);">
+          Perfil
+        </span>
+        <select id="perfil-select"></select>
+        <input id="perfil-nuevo" type="text" placeholder="Nuevo perfil" />
+        <button class="btn btn-outline" id="btn-crear-perfil">Crear</button>
+      </div>
+    </header>
 
-  <div id="card">
-    <h2 id="enunciado">Cargando...</h2>
-    <div id="opciones"></div>
+    <div class="layout">
+      <!-- Tarjeta principal -->
+      <section class="card">
+        <div class="card-inner">
+          <div class="pill-row">
+            <div class="pill" id="pill-meta">
+              <span id="meta-mir">MIR –</span>
+            </div>
+            <div class="pill">
+              <span id="meta-progreso">Pregunta 0 / 0 · Aciertos 0</span>
+            </div>
+          </div>
 
-    <div id="explicacion"></div>
+          <div id="enunciado">Cargando preguntas...</div>
+          <div id="opciones"></div>
 
-    <button id="btn-siguiente">Siguiente</button>
+          <div class="respuesta-panel" id="panel-respuesta"></div>
+
+          <div class="anki-controls" id="anki-controls">
+            <button class="btn anki-btn dificil" id="btn-no-supe">
+              1 · No la supe
+            </button>
+            <button class="btn anki-btn neutra" id="btn-dudosa">
+              2 · Dudosa
+            </button>
+            <button class="btn anki-btn facil" id="btn-supe">
+              Espacio · La supe
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel lateral -->
+      <aside class="side-panel">
+        <div class="side-section">
+          <h2>Modo de estudio</h2>
+          <div class="mode-toggle">
+            <button class="mode-btn active" data-mode="anki" id="btn-modo-anki">
+              Anki (Repetición espaciada)
+            </button>
+            <button class="mode-btn" data-mode="examen" id="btn-modo-examen">
+              Examen
+            </button>
+          </div>
+          <div class="exam-inputs" id="exam-config" style="display:none;">
+            <input type="number" id="exam-num" min="5" max="200" value="50" />
+            <button class="btn" id="btn-iniciar-examen">Iniciar examen</button>
+          </div>
+        </div>
+
+        <div class="side-section">
+          <h2>Filtros</h2>
+          <div class="filters">
+            <label>Asignatura</label>
+            <select id="filtro-asignatura"></select>
+          </div>
+          <div class="filters" style="margin-top:6px;">
+            <label>Dificultad</label>
+            <select id="filtro-dificultad">
+              <option value="todas">Todas</option>
+              <option value="novistas">No vistas</option>
+              <option value="dificiles">Difíciles (&lt;60%)</option>
+              <option value="dominadas">Dominadas (&ge;80%)</option>
+            </select>
+          </div>
+          <div class="filters" style="margin-top:6px;">
+            <label>Buscar</label>
+            <input type="text" id="buscador" placeholder="Texto en enunciado..." style="flex:1;" />
+          </div>
+        </div>
+
+        <div class="side-section">
+          <h2>Estadísticas</h2>
+          <div class="stats-grid">
+            <div class="stat">
+              <div class="stat-label">Vistas</div>
+              <div class="stat-value" id="stat-vistas">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Aciertos</div>
+              <div class="stat-value" id="stat-aciertos">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Fallos</div>
+              <div class="stat-value" id="stat-fallos">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">% Aciertos</div>
+              <div class="stat-value" id="stat-porcentaje">0%</div>
+            </div>
+          </div>
+          <div class="badges-row">
+            <div class="badge" id="badge-hoy">Sesión: 0 tarjetas</div>
+            <div class="badge" id="badge-pendientes">Pendientes hoy: 0</div>
+          </div>
+        </div>
+
+        <div class="side-section">
+          <h2>Atajos</h2>
+          <div style="font-size:0.78rem; color:var(--text-muted);">
+            1 = No la supe · 2 = Dudosa · Espacio = La supe ·
+            Flecha derecha = Siguiente
+          </div>
+        </div>
+
+        <div class="side-section">
+          <h2>Sesión</h2>
+          <button class="btn btn-outline" id="btn-reset-perfil" style="width:100%; justify-content:center;">
+            Resetear progreso del perfil
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      Diseñado para estudio MIR · JSON local · Sin tracking ·
+      Puedes usarlo offline una vez cargado.
+    </footer>
   </div>
 
   <script>
-    let preguntas = [];
-    let actual = 0;
-    let aciertos = 0;
+    // ============================
+    //   Modelo de datos & helpers
+    // ============================
+    let TODAS = [];          // todas las preguntas desde JSON
+    let filtradas = [];      // después de filtros
+    let indiceActual = 0;
+    let modo = "anki";       // "anki" | "examen"
+    let examenEnCurso = false;
+    let examenPreguntas = [];
+    let examenIndice = 0;
+    let perfilActivo = null;
+    let perfiles = [];       // nombres
 
+    const LS_PERFILES = "mir_perfiles_v1";
+    const LS_PERFIL_PREFIX = "mir_perfil_";
+
+    function hoyISO() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function cargarPerfilesLS() {
+      try {
+        const raw = localStorage.getItem(LS_PERFILES);
+        perfiles = raw ? JSON.parse(raw) : ["Neto", "Angela"];
+      } catch {
+        perfiles = ["Perfil 1"];
+      }
+    }
+
+    function guardarPerfilesLS() {
+      try {
+        localStorage.setItem(LS_PERFILES, JSON.stringify(perfiles));
+      } catch {}
+    }
+
+    function getPerfilState(name) {
+      try {
+        const raw = localStorage.getItem(LS_PERFIL_PREFIX + name);
+        if (raw) return JSON.parse(raw);
+      } catch {}
+      return {
+        version: 1,
+        cards: {}, // id -> { ease, interval, repetitions, lapses, due, seen, correct, wrong }
+        global: {
+          seen: 0,
+          correct: 0,
+          wrong: 0,
+          lastSession: hoyISO(),
+          todayCount: 0,
+        },
+      };
+    }
+
+    function savePerfilState(name, state) {
+      try {
+        localStorage.setItem(
+          LS_PERFIL_PREFIX + name,
+          JSON.stringify(state)
+        );
+      } catch {}
+    }
+
+    function getPerfilStateActivo() {
+      if (!perfilActivo) return null;
+      return getPerfilState(perfilActivo);
+    }
+
+    function updatePerfilStateActivo(nextState) {
+      if (!perfilActivo) return;
+      savePerfilState(perfilActivo, nextState);
+      renderStats();
+    }
+
+    // ============================
+    //   Carga de preguntas
+    // ============================
     async function cargarPreguntas() {
       try {
         const res = await fetch("preguntas.json");
-
         if (!res.ok) {
           document.getElementById("enunciado").textContent =
-            "Error cargando preguntas.json (404)";
+            "Error cargando preguntas.json (" + res.status + ")";
           return;
         }
 
-        preguntas = await res.json();
+        const data = await res.json();
+        // Normalizar: si no hay asignatura, ponemos "Cardiología"
+        TODAS = data.map((p) => ({
+          ...p,
+          asignatura: p.asignatura || "Cardiología",
+        }));
 
-        preguntas.sort(() => Math.random() - 0.5);
-
-        actual = 0;
-        aciertos = 0;
-
-        mostrarPregunta();
-      } catch (err) {
+        poblarFiltrosAsignatura();
+        aplicarFiltros();
+        siguientePreguntaAnki(true);
+      } catch (e) {
+        console.error(e);
         document.getElementById("enunciado").textContent =
           "No se pudo cargar preguntas.json";
-        console.error(err);
       }
     }
 
-    function mostrarPregunta() {
-      const p = preguntas[actual];
+    function poblarFiltrosAsignatura() {
+      const select = document.getElementById("filtro-asignatura");
+      const set = new Set(TODAS.map((p) => p.asignatura || "Cardiología"));
+      select.innerHTML = "";
+      const optTodas = document.createElement("option");
+      optTodas.value = "todas";
+      optTodas.textContent = "Todas";
+      select.appendChild(optTodas);
 
-      document.getElementById("contador").textContent =
-        `Pregunta ${actual + 1} / ${preguntas.length} — Aciertos: ${aciertos}`;
+      [...set].sort().forEach((asig) => {
+        const opt = document.createElement("option");
+        opt.value = asig;
+        opt.textContent = asig;
+        select.appendChild(opt);
+      });
+
+      select.value = "todas";
+    }
+
+    // ============================
+    //   Filtros & búsqueda
+    // ============================
+    function aplicarFiltros() {
+      const asig = document.getElementById("filtro-asignatura").value;
+      const dificultad = document.getElementById("filtro-dificultad").value;
+      const query = document
+        .getElementById("buscador")
+        .value.toLowerCase()
+        .trim();
+
+      const perfilState = getPerfilStateActivo();
+
+      filtradas = TODAS.filter((p) => {
+        if (asig !== "todas" && (p.asignatura || "Cardiología") !== asig) {
+          return false;
+        }
+
+        if (query) {
+          const text =
+            (p.enunciado + " " + p.id + " " + p.explicacion).toLowerCase();
+          if (!text.includes(query)) return false;
+        }
+
+        if (!perfilState) return true;
+        const cardState = perfilState.cards[p.id];
+        if (!cardState) {
+          if (dificultad === "novistas") return true;
+          if (dificultad === "dificiles" || dificultad === "dominadas")
+            return false;
+          return true;
+        }
+
+        const total = cardState.correct + cardState.wrong;
+        const ratio = total > 0 ? cardState.correct / total : 0;
+
+        if (dificultad === "novistas") return !total;
+        if (dificultad === "dificiles") return total > 0 && ratio < 0.6;
+        if (dificultad === "dominadas") return total >= 3 && ratio >= 0.8;
+
+        return true;
+      });
+
+      if (filtradas.length === 0) {
+        document.getElementById("enunciado").textContent =
+          "No hay preguntas con los filtros actuales.";
+        document.getElementById("opciones").innerHTML = "";
+        document.getElementById("panel-respuesta").style.display = "none";
+      }
+    }
+
+    // ============================
+    //   Selección de tarjeta (Anki)
+    // ============================
+    function siguientePreguntaAnki(initial = false) {
+      if (filtradas.length === 0) return;
+
+      const perfilState = getPerfilStateActivo();
+      const hoy = hoyISO();
+
+      let candidates = filtradas;
+      if (perfilState) {
+        const due = [];
+        const unseen = [];
+        const future = [];
+
+        for (const p of filtradas) {
+          const st = perfilState.cards[p.id];
+          if (!st || !st.due) {
+            unseen.push(p);
+          } else if (st.due <= hoy) {
+            due.push(p);
+          } else {
+            future.push(p);
+          }
+        }
+
+        if (due.length) {
+          candidates = due;
+        } else if (unseen.length) {
+          candidates = unseen;
+        } else {
+          candidates = future;
+        }
+      }
+
+      const idx = Math.floor(Math.random() * candidates.length);
+      const selected = candidates[idx];
+      indiceActual = TODAS.findIndex((p) => p.id === selected.id);
+
+      mostrarPreguntaActual();
+      if (!initial && perfilState) renderStats();
+    }
+
+    // ============================
+    //   Render de pregunta
+    // ============================
+    function mostrarPreguntaActual() {
+      if (!TODAS.length) return;
+      const p = TODAS[indiceActual];
+
+      const meta = document.getElementById("pill-meta");
+      const m = (p.id || "").match(/MIR\s+(\d{4})/i);
+      const year = m ? m[1] : "–";
+      meta.innerHTML =
+        '<span style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.16em; color:var(--text-muted);">MIR</span> ' +
+        '<strong>' +
+        year +
+        "</strong>";
+
+      const metaProg = document.getElementById("meta-progreso");
+      metaProg.textContent = `Pregunta ${indiceActual + 1} / ${
+        TODAS.length
+      }`;
 
       document.getElementById("enunciado").textContent = p.enunciado;
 
-      const contOpciones = document.getElementById("opciones");
-      contOpciones.innerHTML = "";
+      const cont = document.getElementById("opciones");
+      cont.innerHTML = "";
+      const panelResp = document.getElementById("panel-respuesta");
+      panelResp.style.display = "none";
+      panelResp.innerHTML = "";
 
       p.opciones.forEach((texto, i) => {
-        if (!texto.trim()) return;
-
+        if (!texto || !texto.trim()) return;
         const div = document.createElement("div");
         div.className = "opcion";
-        div.textContent = `${String.fromCharCode(65 + i)}. ${texto}`;
+        const label = document.createElement("div");
+        label.className = "opcion-label";
+        label.textContent = String.fromCharCode(65 + i) + ".";
+        const span = document.createElement("div");
+        span.textContent = texto;
+        div.appendChild(label);
+        div.appendChild(span);
 
-        div.onclick = () => seleccionar(i, div);
+        div.addEventListener("click", () => {
+          manejarRespuesta(i);
+        });
 
-        contOpciones.appendChild(div);
+        cont.appendChild(div);
       });
-
-      document.getElementById("explicacion").style.display = "none";
-      document.getElementById("explicacion").innerHTML = "";
     }
 
-    function seleccionar(i, div) {
-      const correcta = preguntas[actual].indiceCorrecta;
+    function manejarRespuesta(indice) {
+      const p = TODAS[indiceActual];
+      const correcta = p.indiceCorrecta;
 
-      if (i === correcta) {
-        div.classList.add("correcta");
-        aciertos++;
+      const opciones = document.querySelectorAll(".opcion");
+      opciones.forEach((op, i) => {
+        op.classList.remove("correcta", "incorrecta");
+        if (i === correcta) op.classList.add("correcta");
+      });
+      if (indice !== correcta) {
+        opciones[indice].classList.add("incorrecta");
+      }
+
+      const panelResp = document.getElementById("panel-respuesta");
+      panelResp.style.display = "block";
+      panelResp.innerHTML =
+        "<strong>Explicación:</strong><br>" + (p.explicacion || "Sin explicación.");
+
+      // No actualizamos estadísticas aquí todavía; se actualizan al marcar No supe / Dudosa / La supe.
+    }
+
+    // ============================
+    //   SM-2 super simplificado
+    // ============================
+    function registrarResultado(calidad) {
+      // calidad: 0 = no la supe, 3 = dudosa, 5 = la supe
+      const p = TODAS[indiceActual];
+      let state = getPerfilStateActivo();
+      if (!state || !perfilActivo) return;
+
+      let card = state.cards[p.id];
+      if (!card) {
+        card = {
+          ease: 2.5,
+          interval: 0,
+          repetitions: 0,
+          lapses: 0,
+          due: hoyISO(),
+          seen: 0,
+          correct: 0,
+          wrong: 0,
+        };
+      }
+
+      card.seen += 1;
+
+      if (calidad < 3) {
+        card.repetitions = 0;
+        card.lapses += 1;
+        card.wrong += 1;
+        card.interval = 1;
       } else {
-        div.classList.add("incorrecta");
-        const opciones = document.querySelectorAll(".opcion");
-        opciones[correcta].classList.add("correcta");
+        card.correct += 1;
+        card.repetitions += 1;
+        if (card.repetitions === 1) {
+          card.interval = 1;
+        } else if (card.repetitions === 2) {
+          card.interval = 3;
+        } else {
+          card.interval = Math.round(card.interval * card.ease);
+        }
+
+        // actualizar ease
+        const q = calidad; // 3 o 5
+        card.ease =
+          card.ease +
+          (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
+        if (card.ease < 1.3) card.ease = 1.3;
       }
 
-      const exp = document.getElementById("explicacion");
-      exp.style.display = "block";
-      exp.innerHTML = `<strong>Explicación:</strong><br>${preguntas[actual].explicacion}`;
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + card.interval);
+      card.due = dueDate.toISOString().slice(0, 10);
+
+      state.cards[p.id] = card;
+
+      state.global.seen += 1;
+      if (calidad >= 3) state.global.correct += 1;
+      else state.global.wrong += 1;
+
+      if (state.global.lastSession !== hoyISO()) {
+        state.global.lastSession = hoyISO();
+        state.global.todayCount = 0;
+      }
+      state.global.todayCount += 1;
+
+      updatePerfilStateActivo(state);
+
+      // siguiente pregunta según modo
+      if (modo === "anki") {
+        siguientePreguntaAnki();
+      } else if (modo === "examen" && examenEnCurso) {
+        siguientePreguntaExamen();
+      }
     }
 
-    document.getElementById("btn-siguiente").onclick = () => {
-      actual++;
-      if (actual >= preguntas.length) {
-        alert(`¡Terminaste! Aciertos: ${aciertos}/${preguntas.length}`);
-        actual = 0;
-        aciertos = 0;
+    // ============================
+    //   Examen
+    // ============================
+    function iniciarExamen() {
+      if (filtradas.length === 0) {
+        alert("No hay preguntas con los filtros actuales.");
+        return;
       }
-      mostrarPregunta();
-    };
+      const n = parseInt(document.getElementById("exam-num").value, 10) || 50;
+      const copia = filtradas.slice().sort(() => Math.random() - 0.5);
+      examenPreguntas = copia.slice(0, Math.min(n, copia.length));
+      examenIndice = 0;
+      examenEnCurso = true;
+      mostrarPreguntaExamen();
+    }
 
-    cargarPreguntas();
+    function mostrarPreguntaExamen() {
+      if (!examenEnCurso || examenPreguntas.length === 0) return;
+
+      const p = examenPreguntas[examenIndice];
+      indiceActual = TODAS.findIndex((x) => x.id === p.id);
+      mostrarPreguntaActual();
+
+      const metaProg = document.getElementById("meta-progreso");
+      metaProg.textContent = `Examen: ${
+        examenIndice + 1
+      } / ${examenPreguntas.length}`;
+    }
+
+    function siguientePreguntaExamen() {
+      examenIndice++;
+      if (examenIndice >= examenPreguntas.length) {
+        terminarExamen();
+      } else {
+        mostrarPreguntaExamen();
+      }
+    }
+
+    function terminarExamen() {
+      examenEnCurso = false;
+      alert("Examen terminado. Revisa tus tarjetas en modo Anki para reforzar.");
+      siguientePreguntaAnki();
+    }
+
+    // ============================
+    //   Estadísticas render
+    // ============================
+    function renderStats() {
+      const state = getPerfilStateActivo();
+      const vistasEl = document.getElementById("stat-vistas");
+      const aciertosEl = document.getElementById("stat-aciertos");
+      const fallosEl = document.getElementById("stat-fallos");
+      const porcentajeEl = document.getElementById("stat-porcentaje");
+      const badgeHoy = document.getElementById("badge-hoy");
+      const badgePend = document.getElementById("badge-pendientes");
+
+      if (!state) {
+        vistasEl.textContent = "0";
+        aciertosEl.textContent = "0";
+        fallosEl.textContent = "0";
+        porcentajeEl.textContent = "0%";
+        badgeHoy.textContent = "Sesión: 0 tarjetas";
+        badgePend.textContent = "Pendientes hoy: 0";
+        return;
+      }
+
+      const g = state.global;
+      vistasEl.textContent = g.seen;
+      aciertosEl.textContent = g.correct;
+      fallosEl.textContent = g.wrong;
+      const total = g.correct + g.wrong;
+      const pct = total ? Math.round((g.correct / total) * 100) : 0;
+      porcentajeEl.textContent = pct + "%";
+      badgeHoy.textContent = `Sesión (${g.lastSession}): ${
+        g.lastSession === hoyISO() ? g.todayCount : 0
+      } tarjetas`;
+
+      const hoy = hoyISO();
+      let pendientes = 0;
+      for (const p of TODAS) {
+        const st = state.cards[p.id];
+        if (!st || !st.due || st.due <= hoy) pendientes++;
+      }
+      badgePend.textContent = `Pendientes hoy: ${pendientes}`;
+    }
+
+    // ============================
+    //   Perfiles UI
+    // ============================
+    function poblarSelectorPerfiles() {
+      const sel = document.getElementById("perfil-select");
+      sel.innerHTML = "";
+      perfiles.forEach((name) => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        sel.appendChild(opt);
+      });
+      if (!perfilActivo) perfilActivo = perfiles[0];
+      sel.value = perfilActivo;
+    }
+
+    function cambiarPerfil(name) {
+      perfilActivo = name;
+      poblarSelectorPerfiles();
+      aplicarFiltros();
+      renderStats();
+      siguientePreguntaAnki(true);
+    }
+
+    function crearPerfil() {
+      const input = document.getElementById("perfil-nuevo");
+      const name = input.value.trim();
+      if (!name) return;
+      if (perfiles.includes(name)) {
+        alert("Ese perfil ya existe.");
+        return;
+      }
+      perfiles.push(name);
+      guardarPerfilesLS();
+      perfilActivo = name;
+      input.value = "";
+      poblarSelectorPerfiles();
+      renderStats();
+      aplicarFiltros();
+      siguientePreguntaAnki(true);
+    }
+
+    function resetPerfil() {
+      if (!perfilActivo) return;
+      if (!confirm("¿Seguro que quieres borrar el progreso de este perfil?")) {
+        return;
+      }
+      const empty = {
+        version: 1,
+        cards: {},
+        global: {
+          seen: 0,
+          correct: 0,
+          wrong: 0,
+          lastSession: hoyISO(),
+          todayCount: 0,
+        },
+      };
+      savePerfilState(perfilActivo, empty);
+      renderStats();
+      aplicarFiltros();
+      siguientePreguntaAnki(true);
+    }
+
+    // ============================
+    //   Modo (Anki / Examen)
+    // ============================
+    function setModo(next) {
+      modo = next;
+      document
+        .getElementById("btn-modo-anki")
+        .classList.toggle("active", modo === "anki");
+      document
+        .getElementById("btn-modo-examen")
+        .classList.toggle("active", modo === "examen");
+      document.getElementById("exam-config").style.display =
+        modo === "examen" ? "block" : "none";
+
+      if (modo === "anki") {
+        examenEnCurso = false;
+        siguientePreguntaAnki(true);
+      }
+    }
+
+    // ============================
+    //   Eventos UI & teclado
+    // ============================
+    function wiringEventos() {
+      document
+        .getElementById("perfil-select")
+        .addEventListener("change", (e) => cambiarPerfil(e.target.value));
+      document
+        .getElementById("btn-crear-perfil")
+        .addEventListener("click", crearPerfil);
+      document
+        .getElementById("btn-reset-perfil")
+        .addEventListener("click", resetPerfil);
+
+      document
+        .getElementById("filtro-asignatura")
+        .addEventListener("change", () => {
+          aplicarFiltros();
+          siguientePreguntaAnki(true);
+        });
+      document
+        .getElementById("filtro-dificultad")
+        .addEventListener("change", () => {
+          aplicarFiltros();
+          siguientePreguntaAnki(true);
+        });
+      document
+        .getElementById("buscador")
+        .addEventListener("input", () => {
+          aplicarFiltros();
+          siguientePreguntaAnki(true);
+        });
+
+      document
+        .getElementById("btn-modo-anki")
+        .addEventListener("click", () => setModo("anki"));
+      document
+        .getElementById("btn-modo-examen")
+        .addEventListener("click", () => setModo("examen"));
+      document
+        .getElementById("btn-iniciar-examen")
+        .addEventListener("click", iniciarExamen);
+
+      document
+        .getElementById("btn-no-supe")
+        .addEventListener("click", () => registrarResultado(0));
+      document
+        .getElementById("btn-dudosa")
+        .addEventListener("click", () => registrarResultado(3));
+      document
+        .getElementById("btn-supe")
+        .addEventListener("click", () => registrarResultado(5));
+
+      window.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT")
+          return;
+        if (e.key === "1") {
+          registrarResultado(0);
+        } else if (e.key === "2") {
+          registrarResultado(3);
+        } else if (e.key === " " || e.key === "Spacebar") {
+          e.preventDefault();
+          registrarResultado(5);
+        } else if (e.key === "ArrowRight") {
+          if (modo === "anki") siguientePreguntaAnki();
+          else if (modo === "examen" && examenEnCurso)
+            siguientePreguntaExamen();
+        }
+      });
+    }
+
+    // ============================
+    //   Init
+    // ============================
+    (function init() {
+      cargarPerfilesLS();
+      perfilActivo = perfiles[0];
+      poblarSelectorPerfiles();
+      renderStats();
+      wiringEventos();
+      cargarPreguntas();
+    })();
   </script>
-
 </body>
 </html>
