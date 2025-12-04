@@ -2,590 +2,181 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Banco MIR – Cardiología (modo Anki)</title>
+  <title>Banco MIR – Modo Anki</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <style>
-    :root {
-      --bg: #020617;
-      --bg-soft: #020617;
-      --card-bg: #020617;
-      --card-elevated: #020617;
-      --accent: #38bdf8;        /* celeste */
-      --accent-soft: rgba(56, 189, 248, 0.16);
-      --correct: #22c55e;       /* verde estilo AMIR */
-      --wrong: #ef4444;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --border-subtle: #1f2937;
-      --radius-lg: 1rem;
-      --radius-pill: 999px;
-      --shadow-soft: 0 24px 60px rgba(0,0,0,0.55);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: Arial, sans-serif;
       margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #000 100%);
-      color: var(--text-main);
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      padding: 1.5rem;
-    }
-
-    .app {
-      max-width: 900px;
-      width: 100%;
-      margin: auto;
-    }
-
-    header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .title-block {
+      padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      align-items: center;
     }
 
     h1 {
-      font-size: clamp(1.4rem, 2vw + 0.8rem, 1.9rem);
-      margin: 0;
-      font-weight: 650;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      margin-top: 20px;
+      font-size: 28px;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.12rem 0.6rem;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--text-muted);
-      background: radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%);
-    }
-
-    .subtitle {
-      margin: 0;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .chip {
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(15, 118, 110, 0.5);
-      padding: 0.25rem 0.6rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: radial-gradient(circle at 0 0, rgba(22, 163, 74, 0.18), transparent 60%);
-    }
-
-    .chip strong {
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    .card {
-      border-radius: 1.25rem;
-      background: radial-gradient(circle at top left, rgba(34,197,94,0.08), transparent 55%),
-                  radial-gradient(circle at bottom right, rgba(56,189,248,0.15), transparent 60%),
-                  var(--card-bg);
-      border: 1px solid rgba(15,23,42,0.9);
-      box-shadow: var(--shadow-soft);
-      padding: 1.4rem 1.25rem 1.3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.9rem;
-    }
-
-    .id-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .badge-id {
-      border-radius: var(--radius-pill);
-      padding: 0.25rem 0.75rem;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      font-weight: 500;
-      color: #bfdbfe;
-    }
-
-    .tag-diff {
-      padding: 0.16rem 0.6rem;
-      border-radius: var(--radius-pill);
-      font-size: 0.7rem;
-      border: 1px solid rgba(56, 189, 248, 0.45);
-      background: rgba(15, 23, 42, 0.8);
-      color: var(--accent);
-    }
-
-    #enunciado {
-      margin: 0.2rem 0 0.4rem;
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-
-    .enunciado-small {
-      font-size: 0.9rem;
-    }
-
-    ol#lista-opciones {
-      margin: 0.2rem 0 0;
-      padding-left: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      counter-reset: opcion;
+    #card {
+      background: #1e293b;
+      width: 90%;
+      max-width: 780px;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.5);
     }
 
     .opcion {
-      list-style: none;
-      position: relative;
-      padding: 0.45rem 0.75rem 0.45rem 2.1rem;
-      border-radius: 0.8rem;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: radial-gradient(circle at 0 0, rgba(15,23,42,0.95), rgba(15,23,42,0.9));
-      font-size: 0.92rem;
-      color: var(--text-main);
-    }
-
-    .opcion::before {
-      counter-increment: opcion;
-      content: counter(opcion, upper-alpha);
-      position: absolute;
-      left: 0.7rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 1.25rem;
-      height: 1.25rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      background: radial-gradient(circle at 0 0, rgba(15,23,42,0.95), rgba(15,23,42,0.9));
-    }
-
-    .opcion.correcta {
-      border-color: rgba(34, 197, 94, 0.9);
-      background: radial-gradient(circle at 0 0, rgba(34,197,94,0.28), rgba(15,23,42,0.96));
-    }
-
-    .opcion.correcta::before {
-      border-color: rgba(34,197,94,0.95);
-      color: #bbf7d0;
-    }
-
-    .respuesta-panel {
-      margin-top: 0.6rem;
-      padding: 0.75rem 0.85rem;
-      border-radius: 0.9rem;
-      border: 1px solid rgba(22,163,74,0.7);
-      background: radial-gradient(circle at 0 0, rgba(22,163,74,0.25), rgba(6,78,59,0.85));
-      font-size: 0.9rem;
-    }
-
-    .respuesta-panel strong {
-      display: inline-block;
-      margin-bottom: 0.25rem;
-      color: #bbf7d0;
-      font-size: 0.88rem;
-    }
-
-    .respuesta-texto {
-      font-weight: 500;
-      margin-bottom: 0.35rem;
-    }
-
-    .explicacion {
-      margin: 0;
-      font-size: 0.86rem;
-      color: #e5e7eb;
-    }
-
-    .explicacion span.label {
-      display: inline-block;
-      margin-bottom: 0.15rem;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: #bbf7d0;
-      opacity: 0.9;
-    }
-
-    .botonera {
-      margin-top: 0.7rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: flex-end;
-    }
-
-    button {
-      border-radius: var(--radius-pill);
-      border: 1px solid transparent;
-      padding: 0.45rem 0.9rem;
-      font-size: 0.86rem;
-      font-weight: 500;
+      background: #334155;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: rgba(15,23,42,0.9);
-      color: var(--text-main);
-      transition: transform 0.12s ease, box-shadow 0.12s ease,
-                  background 0.12s ease, border-color 0.12s ease;
+      transition: 0.2s;
     }
 
-    button span.key {
-      font-size: 0.7rem;
-      opacity: 0.6;
+    .opcion:hover {
+      background: #475569;
     }
 
-    button.primary {
-      background: linear-gradient(to right, #22c55e, #16a34a);
-      border-color: rgba(22,163,74,0.9);
-      color: #022c22;
-      box-shadow: 0 14px 35px rgba(22,163,74,0.55);
+    .correcta {
+      background: #16a34a !important;
+    }
+    .incorrecta {
+      background: #dc2626 !important;
     }
 
-    button.outline {
-      border-color: rgba(148,163,184,0.7);
-      background: radial-gradient(circle at 0 0, rgba(148,163,184,0.16), rgba(15,23,42,0.96));
-      color: var(--text-main);
+    #explicacion {
+      margin-top: 15px;
+      background: #0f172a;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
     }
 
-    button.danger {
-      border-color: rgba(239,68,68,0.7);
-      background: radial-gradient(circle at 0 0, rgba(239,68,68,0.23), rgba(15,23,42,0.96));
-      color: #fee2e2;
+    #btn-siguiente {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #3b82f6;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      font-size: 16px;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 45px rgba(0,0,0,0.55);
+    #contador {
+      margin-top: 10px;
+      font-size: 18px;
     }
 
-    button:active {
-      transform: translateY(0);
-      box-shadow: none;
-    }
-
-    .muted-note {
-      margin-top: 0.4rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: right;
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 0.9rem;
-      }
-      .card {
-        padding: 1.1rem 0.9rem 1rem;
-      }
-      .botonera {
-        justify-content: space-between;
-      }
-      .respuesta-panel {
-        font-size: 0.86rem;
-      }
-      #enunciado {
-        font-size: 0.95rem;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div class="title-block">
-        <div class="pill">Banco MIR · Cardiología</div>
-        <h1>Modo Anki para preguntas MIR</h1>
-        <p class="subtitle">
-          Pasa las tarjetas, marca si la supiste y las dificiles se repetirán más veces.
-        </p>
-      </div>
 
-      <div class="stats">
-        <div class="chip">
-          <strong id="stat-pregunta">Pregunta 0 / 0</strong>
-        </div>
-        <div class="chip">
-          <strong id="stat-ratio">Aciertos: 0 / 0</strong>
-        </div>
-      </div>
-    </header>
+  <h1>Modo Anki – Preguntas MIR</h1>
+  <div id="contador">Cargando preguntas...</div>
 
-    <main class="card">
-      <div class="id-row">
-        <div class="badge-id" id="campo-id">Cargando…</div>
-        <div class="tag-diff" id="campo-meta">Cardiología · MIR</div>
-      </div>
+  <div id="card">
+    <h2 id="enunciado">Cargando...</h2>
+    <div id="opciones"></div>
 
-      <p id="enunciado">Cargando preguntas…</p>
+    <div id="explicacion"></div>
 
-      <ol id="lista-opciones"></ol>
-
-      <button id="btn-mostrar" class="outline" type="button">
-        Mostrar respuesta
-      </button>
-
-      <div id="panel-respuesta" class="respuesta-panel" style="display:none;">
-        <strong>Respuesta correcta</strong>
-        <div class="respuesta-texto" id="texto-respuesta"></div>
-        <p class="explicacion">
-          <span class="label">Explicación</span>
-          <span id="texto-explicacion"></span>
-        </p>
-      </div>
-
-      <div class="botonera" id="botonera-post" style="display:none;">
-        <button type="button" class="danger" id="btn-no-supe">
-          No la supe
-          <span class="key">[1]</span>
-        </button>
-        <button type="button" class="primary" id="btn-supe">
-          La supe
-          <span class="key">[2]</span>
-        </button>
-        <button type="button" class="outline" id="btn-siguiente">
-          Siguiente →
-          <span class="key">[Espacio]</span>
-        </button>
-      </div>
-
-      <p class="muted-note">
-        Atajos: 1 = No la supe · 2 = La supe · Espacio = Siguiente
-      </p>
-    </main>
+    <button id="btn-siguiente">Siguiente</button>
   </div>
 
   <script>
-    let mazo = [];
-    let indiceActual = 0;
+    let preguntas = [];
+    let actual = 0;
     let aciertos = 0;
-    let vistas = 0;
 
-    const elId          = document.getElementById("campo-id");
-    const elMeta        = document.getElementById("campo-meta");
-    const elEnunciado   = document.getElementById("enunciado");
-    const elLista       = document.getElementById("lista-opciones");
-    const btnMostrar    = document.getElementById("btn-mostrar");
-    const panelRespuesta= document.getElementById("panel-respuesta");
-    const textoRespuesta= document.getElementById("texto-respuesta");
-    const textoExplica  = document.getElementById("texto-explicacion");
-    const botoneraPost  = document.getElementById("botonera-post");
-    const statPregunta  = document.getElementById("stat-pregunta");
-    const statRatio     = document.getElementById("stat-ratio");
-    const btnSupe       = document.getElementById("btn-supe");
-    const btnNoSupe     = document.getElementById("btn-no-supe");
-    const btnSiguiente  = document.getElementById("btn-siguiente");
-
-    // Cargar JSON
-    document.addEventListener("DOMContentLoaded", async () => {
+    async function cargarPreguntas() {
       try {
         const res = await fetch("preguntas.json");
-        const data = await res.json();
 
-        // Barajar un poco
-        mazo = data.slice().sort(() => Math.random() - 0.5);
-
-        if (mazo.length === 0) {
-          elEnunciado.textContent = "No hay preguntas en el archivo JSON.";
+        if (!res.ok) {
+          document.getElementById("enunciado").textContent =
+            "Error cargando preguntas.json (404)";
           return;
         }
 
-        indiceActual = 0;
+        preguntas = await res.json();
+
+        preguntas.sort(() => Math.random() - 0.5);
+
+        actual = 0;
+        aciertos = 0;
+
         mostrarPregunta();
-        wiringEventos();
-      } catch (e) {
-        console.error(e);
-        elEnunciado.textContent = "Error cargando preguntas.json";
+      } catch (err) {
+        document.getElementById("enunciado").textContent =
+          "No se pudo cargar preguntas.json";
+        console.error(err);
       }
-    });
-
-    function wiringEventos() {
-      btnMostrar.addEventListener("click", mostrarRespuesta);
-      btnSupe.addEventListener("click", () => marcar(true));
-      btnNoSupe.addEventListener("click", () => marcar(false));
-      btnSiguiente.addEventListener("click", siguiente);
-
-      // Atajos de teclado simples
-      document.addEventListener("keydown", (ev) => {
-        if (ev.target.tagName === "INPUT" || ev.target.tagName === "TEXTAREA") return;
-
-        if (ev.key === " " || ev.key === "Spacebar") {
-          ev.preventDefault();
-          if (panelRespuesta.style.display === "none") {
-            mostrarRespuesta();
-          } else {
-            siguiente();
-          }
-        } else if (ev.key === "1") {
-          if (panelRespuesta.style.display !== "none") marcar(false);
-        } else if (ev.key === "2") {
-          if (panelRespuesta.style.display !== "none") marcar(true);
-        } else if (ev.key === "Enter") {
-          if (panelRespuesta.style.display === "none") mostrarRespuesta();
-          else siguiente();
-        }
-      });
     }
 
     function mostrarPregunta() {
-      const p = mazo[indiceActual];
-      if (!p) {
-        elEnunciado.textContent = "Has completado todas las tarjetas de este mazo 🎉";
-        elLista.innerHTML = "";
-        btnMostrar.style.display = "none";
-        panelRespuesta.style.display = "none";
-        botoneraPost.style.display = "none";
-        return;
-      }
+      const p = preguntas[actual];
 
-      elId.textContent = p.id || "Sin ID";
-      elEnunciado.textContent = p.enunciado || "[Sin enunciado]";
+      document.getElementById("contador").textContent =
+        `Pregunta ${actual + 1} / ${preguntas.length} — Aciertos: ${aciertos}`;
 
-      // Ajustar tamaño si es muy largo
-      if ((p.enunciado || "").length > 220) {
-        elEnunciado.classList.add("enunciado-small");
-      } else {
-        elEnunciado.classList.remove("enunciado-small");
-      }
+      document.getElementById("enunciado").textContent = p.enunciado;
 
-      // Meta: año MIR si lo hay dentro del ID
-      const meta = extraerMetaDesdeId(p.id);
-      elMeta.textContent = meta;
+      const contOpciones = document.getElementById("opciones");
+      contOpciones.innerHTML = "";
 
-      // Opciones
-      elLista.innerHTML = "";
-      (p.opciones || []).forEach((texto, idx) => {
-        const li = document.createElement("li");
-        li.className = "opcion";
-        li.textContent = texto || "";
-        li.dataset.index = idx;
-        elLista.appendChild(li);
+      p.opciones.forEach((texto, i) => {
+        if (!texto.trim()) return;
+
+        const div = document.createElement("div");
+        div.className = "opcion";
+        div.textContent = `${String.fromCharCode(65 + i)}. ${texto}`;
+
+        div.onclick = () => seleccionar(i, div);
+
+        contOpciones.appendChild(div);
       });
 
-      // Reset panel de respuesta
-      panelRespuesta.style.display = "none";
-      botoneraPost.style.display = "none";
-      btnMostrar.style.display = "inline-flex";
-
-      actualizarStats();
+      document.getElementById("explicacion").style.display = "none";
+      document.getElementById("explicacion").innerHTML = "";
     }
 
-    function extraerMetaDesdeId(id) {
-      if (!id || typeof id !== "string") return "Cardiología · MIR";
-      const match = id.match(/\(MIR\s*([0-9]{2,4})\)/i);
-      if (match) {
-        let year = match[1];
-        if (year.length === 2) {
-          year = "20" + year;
-        }
-        return `Cardiología · MIR ${year}`;
-      }
-      return "Cardiología · MIR";
-    }
+    function seleccionar(i, div) {
+      const correcta = preguntas[actual].indiceCorrecta;
 
-    function mostrarRespuesta() {
-      const p = mazo[indiceActual];
-      if (!p) return;
-
-      // Limpiar marca previa
-      Array.from(elLista.children).forEach(li => li.classList.remove("correcta"));
-
-      const idx = p.indiceCorrecta;
-
-      if (typeof idx === "number" && idx >= 0 && idx < (p.opciones || []).length) {
-        const letra = String.fromCharCode(65 + idx); // A, B, C, D...
-        const texto = p.opciones[idx] || "";
-        textoRespuesta.textContent = `${letra}. ${texto}`;
-
-        const liCorrecta = elLista.querySelector(`[data-index="${idx}"]`);
-        if (liCorrecta) {
-          liCorrecta.classList.add("correcta");
-        }
-      } else {
-        textoRespuesta.textContent =
-          "Esta pregunta no tiene opción marcada en el JSON. Revisa la explicación.";
-      }
-
-      textoExplica.textContent = p.explicacion || "Sin explicación.";
-
-      panelRespuesta.style.display = "block";
-      botoneraPost.style.display = "flex";
-      btnMostrar.style.display = "none";
-
-      vistas++;
-      actualizarStats();
-    }
-
-    // Modo “Anki”: si la supo -> sigue; si no la supo -> reinsertar al final
-    function marcar(supe) {
-      if (supe) {
+      if (i === correcta) {
+        div.classList.add("correcta");
         aciertos++;
       } else {
-        // Duplicamos la pregunta al final del mazo
-        const p = mazo[indiceActual];
-        mazo.push(p);
+        div.classList.add("incorrecta");
+        const opciones = document.querySelectorAll(".opcion");
+        opciones[correcta].classList.add("correcta");
       }
-      siguiente();
+
+      const exp = document.getElementById("explicacion");
+      exp.style.display = "block";
+      exp.innerHTML = `<strong>Explicación:</strong><br>${preguntas[actual].explicacion}`;
     }
 
-    function siguiente() {
-      if (mazo.length === 0) return;
-
-      indiceActual++;
-      if (indiceActual >= mazo.length) {
-        indiceActual = 0;
+    document.getElementById("btn-siguiente").onclick = () => {
+      actual++;
+      if (actual >= preguntas.length) {
+        alert(`¡Terminaste! Aciertos: ${aciertos}/${preguntas.length}`);
+        actual = 0;
+        aciertos = 0;
       }
       mostrarPregunta();
-    }
+    };
 
-    function actualizarStats() {
-      const total = mazo.length;
-      statPregunta.textContent = `Pregunta ${Math.min(indiceActual + 1, total)} / ${total}`;
-      statRatio.textContent = `Aciertos: ${aciertos} / ${vistas}`;
-    }
+    cargarPreguntas();
   </script>
+
 </body>
 </html>
